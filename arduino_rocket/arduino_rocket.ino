@@ -1,3 +1,7 @@
+////////////////////////////////
+// By: Kat Sullivan
+////////////////////////////////
+
 const int digitalOne = 2;  // digital input
 int counter = 0;
 int avgSensorOne = 0;
@@ -10,28 +14,12 @@ void setup() {
   establishContact();
 }
 
-//void loop() {
-//  int analogValue = analogRead(A0)/4;
-//  Serial.println(analogValue);
-//  
-//  // print different formats:
-//  Serial.write(analogValue);  // print the raw binary value
-//  Serial.print('\t');         // print a tab
-//  // print the ASCII-encoded values:
-//  Serial.print(analogValue, BIN);  // print ASCII-encoded binary value
-//  Serial.print('\t');              // print a tab
-//  Serial.print(analogValue);       // print decimal value
-//  Serial.print('\t');              // print a tab
-//  Serial.print(analogValue, HEX);  // print hexidecimal value
-//  Serial.print('\t');              // print a tab
-//  Serial.print(analogValue, OCT);  // print octal value
-//  Serial.println();                // print linefeed & carriage return  
-//}
-
 void loop() {
   if (Serial.available() > 0) {
     // read the incoming byte
     int inByte = Serial.read();
+    // take the average of the next 30 reads and send that value
+    // to Processing to create a more fluid motion
     for(int i=0; i<30; i++){
       int sensorValue = analogRead(A0);
       avgSensorOne += sensorValue;
@@ -55,6 +43,7 @@ void loop() {
   }
 }
 
+// Used for the handshake method with Processing
 void establishContact() {
   while (Serial.available() <= 0) {
     Serial.println("hello");  // send a starting message
