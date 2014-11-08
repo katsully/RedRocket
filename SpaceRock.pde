@@ -18,7 +18,8 @@ class SpaceRock {
   // Display the space rock on screen
   void displaySpaceRock() {
     noStroke();
-    fill(0, 255, 0);   
+    fill(0, 255, 0); 
+    textSize(60);
     ellipse(loc.x, loc.y, radius, radius);
   }
 

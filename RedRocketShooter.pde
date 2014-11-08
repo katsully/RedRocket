@@ -19,7 +19,8 @@ int counter = 0;
 boolean gameOver = false;  // switches to true when the rocket is hit
 
 // these numbers will increase as you progress through the levels
-int numSpaceRocks, spaceRockRadius = 20;  
+int numSpaceRocks = 20;
+int spaceRockRadius = 20;
 
 void setup() {
   size(800, 600);
@@ -28,8 +29,8 @@ void setup() {
   // read incoming bytes to a buffer until you get a linefeed (ASCII 10)
   myPort.bufferUntil('\n');
   redRocket = new Rocket();
-  for (int i = 0; i<20; i++) {
-    spaceRocks.add(new SpaceRock((int)random(0, width), (int)random(-600, -50), numSpaceRocks, 1));
+  for (int i = 0; i<numSpaceRocks; i++) {
+    spaceRocks.add(new SpaceRock((int)random(0, width), (int)random(-600, -50), spaceRockRadius, 1));
   }  
 }
 
@@ -71,14 +72,14 @@ void draw() {
     justShot = true;
   }
 
-  
+  // display all space rocks on screen
   //check if rocket hit by space rock or if rock went off screen
   iter = spaceRocks.iterator();
   while (iter.hasNext ()) {
     SpaceRock r = iter.next();
     r.fall();
     r.displaySpaceRock();
-    if (r.loc.y > height+r.radius) {
+    if (r.getYPos() > height+r.radius) {
       iter.remove();
     }
     if(redRocket.hit(r)){
@@ -90,7 +91,6 @@ void draw() {
   if (spaceRocks.isEmpty()) {
     showScore = true;    
   }
-  
   delay(1);
 }
 
@@ -112,13 +112,8 @@ void serialEvent(Serial myPort) {
     // if you have heard from the microcontroller, proceed
     else {
       // split the string at the commas and convert the sections into integers
-      int sensors[] = int(split(myString, ','));
-
-      for (int sensorNum = 0; sensorNum < sensors.length; sensorNum++) {
-        print("Sensor " + sensorNum + ": " + sensors[sensorNum] + "\t");
-      }
-      // add a linefeed at the end
-      println();
+      int sensors[] = int(split(myString, ','));      
+      
       if (sensors.length > 1) {
         xpos = (int)map(sensors[0], 0, 1023, 0, width);
         ypos = (int)map(sensors[1], 0, 1023, 0, height);
